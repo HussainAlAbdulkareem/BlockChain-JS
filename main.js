@@ -7,15 +7,10 @@ class Block {
         this.data = data;
         this.previousHash = "0";
         this.hash = this.calculateHash();
-        this.nonce = 0;
     }
 
     calculateHash() {
         return SHA256(this.index + this.previousHash + this.timestamp + this.data + this.nonce).toString();
-    }
-
-    mineBlock(difficulty){
-
     }
 
 }
@@ -33,6 +28,7 @@ class Blockchain {
     }
 
     addBlock(newBlock) {
+        newBlock.index = this.chain[this.chain.length - 1].index + 1;
         newBlock.previousHash = this.lastestBlock().hash;
         newBlock.hash = newBlock.calculateHash();
         this.chain.push(newBlock);
@@ -56,4 +52,11 @@ class Blockchain {
 
     }
 }
+
+let blockchain = new Blockchain();
+blockchain.addBlock(new Block("05/08/2024", {amount: 20}));
+blockchain.addBlock(new Block("05/08/2024", {amount: 55}));
+blockchain.addBlock(new Block("05/08/2024", {amount: 120}));
+console.log(JSON.stringify(blockchain, null, 4));
+console.log("Is the blockchain valid? " + blockchain.checkValid());
 
