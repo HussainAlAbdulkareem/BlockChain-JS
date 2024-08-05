@@ -19,3 +19,26 @@ class Block {
     }
 
 }
+
+class Blockchain {
+    constructor() {
+        this.chain = [this.createGenesis()];
+    }
+    createGenesis() {
+        return new Block("05/08/2024", "Genesis block");
+    }
+
+    lastestBlock() {
+        return this.chain[this.chain.length - 1];
+    }
+
+    addBlock(newBlock) {
+        newBlock.previousHash = this.lastestBlock().Hash;
+        newBlock.hash = newBlock.calculateHash();
+        this.chain.push(newBlock);
+    }
+
+}
+
+blockchain = new Blockchain();
+console.log(blockchain.chain);
