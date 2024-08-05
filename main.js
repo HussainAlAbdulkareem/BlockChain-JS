@@ -6,7 +6,7 @@ class Block {
         this.timestamp = timestamp;
         this.data = data;
         this.previousHash = "0";
-        this.Hash = this.calculateHash();
+        this.hash = this.calculateHash();
         this.nonce = 0;
     }
 
@@ -33,12 +33,27 @@ class Blockchain {
     }
 
     addBlock(newBlock) {
-        newBlock.previousHash = this.lastestBlock().Hash;
+        newBlock.previousHash = this.lastestBlock().hash;
         newBlock.hash = newBlock.calculateHash();
         this.chain.push(newBlock);
     }
 
+    checkValid() {
+        for (let i = 1; i < this.chain.length; i++){
+            const currentBlock = this.chain[i];
+            const prevBlock = this.chain[i - 1];
+
+            if (currentBlock.hash !== currentBlock.calculateHash()){
+                return false;
+            }
+
+            if (currentBlock.previousHash !== prevBlock.hash){
+                return false;
+            }
+        }
+
+        return true;
+
+    }
 }
 
-blockchain = new Blockchain();
-console.log(blockchain.chain);
